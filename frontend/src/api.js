@@ -1,9 +1,10 @@
 /**
  * API service for communicating with Flask backend
- * Base URL points to Flask server running on port 5000
+ * Base URL points to Flask server running on port 5000 in development
+ * In production on Vercel, it uses the relative /api path
  */
 
-const API_BASE_URL = 'http://localhost:5000';
+const API_BASE_URL = process.env.REACT_APP_API_URL || (process.env.NODE_ENV === 'production' ? '' : 'http://localhost:5000');
 
 /**
  * Classify multiple images using the backend API
@@ -21,8 +22,8 @@ export async function classifyImages(imageFiles) {
   });
   
   try {
-    // Send POST request to /predict endpoint
-    const response = await fetch(`${API_BASE_URL}/predict`, {
+    // Send POST request to /api/predict endpoint
+    const response = await fetch(`${API_BASE_URL}/api/predict`, {
       method: 'POST',
       body: formData,
     });
@@ -82,7 +83,7 @@ export async function downloadClassifiedImages(sessionId) {
  */
 export async function checkHealth() {
   try {
-    const response = await fetch(`${API_BASE_URL}/health`);
+    const response = await fetch(`${API_BASE_URL}/api/health`);
     return response.ok;
   } catch (error) {
     return false;

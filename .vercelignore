@@ -1,0 +1,6 @@
+backend/classified_images
+__pycache__
+*.pyc
+.env
+node_modules
+.git
