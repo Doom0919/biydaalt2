@@ -1,0 +1,42 @@
+# Root level gitignore
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+
+# Virtual Environment
+venv/
+.venv/
+env/
+ENV/
+
+# Node
+node_modules/
+
+# IDE
+.idea/
+.vscode/
+
+# OS
+.DS_Store
+Thumbs.db
+*.swp
+*.swo
+*~
+
+# Environment
+.env
+.env.local
+
+# Output files
+backend/classified_images/
+*.zip
+
+# Logs
+*.log
+
+# Build
+build/
+dist/
