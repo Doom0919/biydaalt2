@@ -145,6 +145,7 @@ def health():
         "classes": CIFAR10_CLASSES
     })
 
+@app.route('/api', methods=['GET'])
 @app.route('/api/', methods=['GET'])
 def index():
     """API index endpoint"""
@@ -156,13 +157,6 @@ def index():
         }
     })
 
-# Vercel serverless function handler
-def handler(request):
-    with app.request_context(request.environ):
-        try:
-            # Process the request through Flask
-            response = app.full_dispatch_request()
-        except Exception as e:
-            response = jsonify({"error": str(e)})
-            response.status_code = 500
-    return response
+# Export the Flask app for Vercel
+# Vercel will automatically call this app with WSGI
+app.debug = False

@@ -4,7 +4,11 @@
  * In production on Vercel, it uses the relative /api path
  */
 
-const API_BASE_URL = process.env.REACT_APP_API_URL || (process.env.NODE_ENV === 'production' ? '' : 'http://localhost:5000');
+// Use relative path for API calls (works in production)
+// In development, use localhost:5000
+const API_BASE_URL = window.location.hostname === 'localhost' 
+  ? 'http://localhost:5000'
+  : '';
 
 /**
  * Classify multiple images using the backend API
