@@ -3,6 +3,7 @@
  * Runs entirely in the browser - no backend needed!
  */
 
+import * as tf from '@tensorflow/tfjs';
 import * as mobilenet from '@tensorflow-models/mobilenet';
 
 // CIFAR-10 classes
@@ -19,6 +20,8 @@ let model = null;
 export async function loadModel() {
   if (!model) {
     console.log('Loading MobileNet model...');
+    // Ensure TensorFlow.js is ready
+    await tf.ready();
     model = await mobilenet.load();
     console.log('Model loaded!');
   }
