@@ -3,6 +3,7 @@
  * Runs entirely in the browser - no backend needed!
  */
 
+import * as tf from '@tensorflow/tfjs';
 import * as mobilenet from '@tensorflow-models/mobilenet';
 
 // CIFAR-10 classes
@@ -189,9 +190,8 @@ export async function checkHealth() {
   }
 }
 
-/**
- * Download not available in browser mode
- */
+// Dummy function for compatibility (not needed in browser)
 export async function downloadClassifiedImages(sessionId) {
   console.log('Download not available in browser-only mode');
+  alert('Download feature is not available in browser-only mode');
 }
