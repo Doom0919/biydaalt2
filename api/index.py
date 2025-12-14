@@ -4,14 +4,14 @@ Uses pretrained PyTorch ResNet20 model to classify images
 """
 
 from flask import Flask, request, jsonify
-from werkzeug.wrappers import Response
+from flask_cors import CORS
 import torch
 import torchvision.transforms as transforms
 from PIL import Image
 import io
-import base64
 
 app = Flask(__name__)
+CORS(app)  # Enable CORS for all routes
 
 # CIFAR-10 class labels
 CIFAR10_CLASSES = [
@@ -145,6 +145,7 @@ def health():
         "classes": CIFAR10_CLASSES
     })
 
+@app.route('/', methods=['GET'])
 @app.route('/api', methods=['GET'])
 @app.route('/api/', methods=['GET'])
 def index():
@@ -158,5 +159,7 @@ def index():
     })
 
 # Export the Flask app for Vercel
-# Vercel will automatically call this app with WSGI
-app.debug = False
+# Vercel will automatically detect and serve this app
+if __name__ != '__main__':
+    # Running on Vercel
+    app.debug = False

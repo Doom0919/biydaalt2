@@ -1,5 +1,5 @@
 flask
+flask-cors
 torch
 torchvision
 pillow
-werkzeug
