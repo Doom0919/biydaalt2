@@ -224,11 +224,14 @@ def health():
 
 
 if __name__ == '__main__':
+    import os
+    port = int(os.environ.get('PORT', 5000))
+    
     print("\n" + "="*50)
     print("CIFAR-10 Image Classification Server")
     print("="*50)
     print(f"Available classes: {', '.join(CIFAR10_CLASSES)}")
-    print("Server running on http://localhost:5000")
+    print(f"Server running on port {port}")
     print("="*50 + "\n")
     
-    app.run(host='0.0.0.0', port=5000, debug=True)
+    app.run(host='0.0.0.0', port=port, debug=False)
