@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { classifyImages, downloadClassifiedImages } from './api';
+import { classifyImages } from './api';
 
 function App() {
   // State for selected files and their preview URLs
@@ -8,13 +8,12 @@ function App() {
   
   // State for classification results
   const [results, setResults] = useState({});
-  const [sessionId, setSessionId] = useState(null);
   const [classCounts, setClassCounts] = useState({});
   
   // State for loading and error handling
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
-  const [downloadLoading, setDownloadLoading] = useState(false);
+  // No download in browser-only mode
 
   /**
    * Handle file selection from input
@@ -38,7 +37,6 @@ function App() {
     
     // Clear previous results and errors
     setResults({});
-    setSessionId(null);
     setClassCounts({});
     setError(null);
   };
@@ -66,34 +64,17 @@ function App() {
       });
       
       setResults(resultsMap);
-      setSessionId(data.session_id);
       setClassCounts(data.class_counts || {});
       
     } catch (err) {
-      setError(`Failed to classify images: ${err.message}. Make sure the backend server is running on port 5000.`);
+      setError(`Failed to classify images: ${err.message}. Please try again.`);
       
     } finally {
       setLoading(false);
     }
   };
 
-  /**
-   * Handle download of classified images
-   */
-  const handleDownload = async () => {
-    if (!sessionId) return;
-    
-    setDownloadLoading(true);
-    setError(null);
-    
-    try {
-      await downloadClassifiedImages(sessionId);
-    } catch (err) {
-      setError(`Failed to download images: ${err.message}`);
-    } finally {
-      setDownloadLoading(false);
-    }
-  };
+  // Download is not available in browser-only mode
 
   /**
    * Clear all selections and results
@@ -105,7 +86,6 @@ function App() {
     setSelectedFiles([]);
     setPreviews([]);
     setResults({});
-    setSessionId(null);
     setClassCounts({});
     setError(null);
   };
@@ -114,7 +94,7 @@ function App() {
     <div className="app">
       <header className="header">
         <h1>🖼️ CIFAR-10 Image Classifier</h1>
-        <p>Upload images to classify them using a pretrained PyTorch ResNet20 model</p>
+        <p>Upload images to classify them instantly in your browser (TensorFlow.js)</p>
       </header>
 
       <main className="main-content">
@@ -150,16 +130,6 @@ function App() {
               {loading ? 'Classifying...' : 'Classify Images'}
             </button>
             
-            {sessionId && (
-              <button 
-                onClick={handleDownload}
-                disabled={downloadLoading}
-                className="btn btn-download"
-              >
-                {downloadLoading ? 'Downloading...' : '📥 Download ZIP'}
-              </button>
-            )}
-            
             <button 
               onClick={handleClear}
               disabled={loading}
@@ -171,7 +141,7 @@ function App() {
         )}
 
         {/* Class Distribution Summary */}
-        {sessionId && Object.keys(classCounts).length > 0 && (
+        {Object.keys(classCounts).length > 0 && (
           <div className="summary-section">
             <h3>Classification Summary:</h3>
             <div className="class-distribution">
@@ -182,7 +152,7 @@ function App() {
                 </div>
               ))}
             </div>
-            <p className="save-info">✅ Images saved to folders by class on server</p>
+            <p className="save-info">✅ Runs fully client-side. No data leaves your browser.</p>
           </div>
         )}
 
@@ -255,7 +225,7 @@ function App() {
       </main>
 
       <footer className="footer">
-        <p>Powered by PyTorch & Flask Backend | React Frontend</p>
+        <p>Powered by TensorFlow.js | React Frontend</p>
       </footer>
     </div>
   );
